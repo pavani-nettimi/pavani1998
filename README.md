@@ -51,13 +51,6 @@ Located in the `scripts/` directory.
 2. **Deploy to Kubernetes Cluster**
    - GitHub Actions uses `kubectl apply` to deploy manifests using a kubeconfig stored in GitHub Secrets.
 
-3. **Access the App**
-   - Use `kubectl port-forward` or create an external service if needed:
-     ```
-     kubectl port-forward svc/wisecow-service 8080:80
-     curl http://localhost:8080
-     ```
-
 ---
 
 ## Author
