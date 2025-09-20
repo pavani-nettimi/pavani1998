@@ -1,28 +1,68 @@
-# Cow wisdom web server
+# Wisecow Application - Kubernetes Deployment with CI/CD
 
-## Prerequisites
+## Project Overview
 
-```
-sudo apt install fortune-mod cowsay -y
-```
+This project demonstrates the containerization and deployment of the **Wisecow** application using Docker, Kubernetes, and GitHub Actions. Additionally, utility scripts are provided to support backup, and application health checks.
 
-## How to use?
+---
 
-1. Run `./wisecow.sh`
-2. Point the browser to server port (default 4499)
+## Project Objectives
 
-## What to expect?
-![wisecow](https://github.com/nyrahul/wisecow/assets/9133227/8d6bfde3-4a5a-480e-8d55-3fef60300d98)
+### 1. **Dockerization**
 
-# Problem Statement
-Deploy the wisecow application as a k8s app
+- Created a Dockerfile to containerize the Wisecow application.
+- The image installs required tools (`cowsay`, `fortune`, etc.) and runs a custom script on container startup.
+- The app runs on port `4499`.
 
-## Requirement
-1. Create Dockerfile for the image and corresponding k8s manifest to deploy in k8s env. The wisecow service should be exposed as k8s service.
-2. Github action for creating new image when changes are made to this repo
-3. [Challenge goal]: Enable secure TLS communication for the wisecow app.
+### 2. **Kubernetes Deployment**
 
-## Expected Artifacts
-1. Github repo containing the app with corresponding dockerfile, k8s manifest, any other artifacts needed.
-2. Github repo with corresponding github action.
-3. Github repo should be kept private and the access should be enabled for following github IDs: nyrahul
+- Developed Kubernetes manifest files:
+  - **Deployment**: Runs the Wisecow container as a Pod.
+  - **Service**: Exposes the application internally using `ClusterIP`.
+- The application can be accessed within the cluster or via `kubectl port-forward`.
+
+### 3. **CI/CD with GitHub Actions**
+
+- Configured a GitHub Actions workflow to automate:
+  - Docker image build and push to Docker Hub.
+  - Kubernetes deployment after a successful build.
+- Uses GitHub Secrets for Docker Hub and Kubernetes authentication.
+
+---
+
+## Utility Bash Scripts
+
+Located in the `scripts/` directory.
+
+| Script | Description | Usage |
+|-------|-------------|-------|
+| `Automated_Backup_Script.sh` | Backs up a directory to a destination folder with logging. | `./Automated_Backup_Script.sh <SOURCE_DIR> <BACKUP_DEST>` |
+| `Application_Health_Checker.sh` | Checks if an application is running by testing the URL's HTTP response. | `./Application_Health_Checker.sh <APP_URL>` |
+
+> Make scripts executable using `chmod +x script_name.sh` before running.
+
+---
+
+## Steps to Run the Project
+
+1. **Build and Push Docker Image**  
+   - Handled automatically via GitHub Actions when code is pushed to the `main` branch.
+
+2. **Deploy to Kubernetes Cluster**
+   - GitHub Actions uses `kubectl apply` to deploy manifests using a kubeconfig stored in GitHub Secrets.
+
+3. **Access the App**
+   - Use `kubectl port-forward` or create an external service if needed:
+     ```
+     kubectl port-forward svc/wisecow-service 8080:80
+     curl http://localhost:8080
+     ```
+
+---
+
+## Author
+
+**Pavani Nettimi**  
+DevOps enthusiast working on automation and cloud-native solutions.
+
+---
